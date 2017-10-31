@@ -25,7 +25,7 @@ try:
         state = row[2]
         year = row[3]
 
-        print "numer: %s, house: %s, state: %s, year: %s" % (num, house, state, year)
+        print "number: %s, house: %s, state: %s, year: %s" % (num, house, state, year)
 
 except:
     print 'Error querying data'
