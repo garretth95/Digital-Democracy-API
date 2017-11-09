@@ -1,0 +1,60 @@
+<!doctype html>
+
+{% load static %}
+
+<html lang="en" dir="ltr">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>New User</title>
+		<link rel="stylesheet" href="{% static '/DDAPIwebsite/css/app.css' %}">
+	</head>
+
+
+	<body class="back">
+
+		<div class="inner-box">
+
+			<img src="{% static '/DDAPIwebsite/images/DD-API.png' %}" height="200">
+			<br>
+			<br>
+
+			<form action="/new-user/" method="POST">
+				<p>
+					<label for="new_user">First Name: </label>
+					<input align="center" id="new_user" type="text" name="new_user" value="{{ first_name }}">
+				</p>
+
+				<p>
+					<label for="new_user">Last Name: </label>
+					<input align="center" id="new_user" type="text" name="new_user" value="{{ last_name }}">
+				</p>
+
+				<p>
+					<label for="new_user">Email: </label>
+					<input align="center" id="new_user" type="text" name="new_user" value="{{ email }}">
+				</p>
+
+{#				need to change so confirm email doesn't change the value 'email'#}
+{#				should just check against first email input for validity before#}
+{#				submitting#}
+
+				<p>
+					<label for="new_user" style="padding-right: 5px">Confirm Email:</label>
+					<input align="center" id="new_user" type="text" name="new_user" value="{{ email }}">
+				</p>
+
+{#				probably need more fields#}
+
+				<input type="submit" value="submit">
+
+{#				need to fix centered issue#}
+
+			</form>
+		</div>
+
+	</body>
+
+</html>
