@@ -32,7 +32,7 @@ body.back {
   border-left: 1px solid #CCCCCC;
 }
 
-form  {
+.tbl  {
 	display: table;
 }
 
@@ -46,8 +46,4 @@ label {
 
 input {
 	display: table-cell;
-}
-
-.centered {
-	display: table-row;
 }
