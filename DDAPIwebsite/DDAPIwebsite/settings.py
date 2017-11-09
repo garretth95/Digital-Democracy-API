@@ -76,8 +76,15 @@ WSGI_APPLICATION = 'DDAPIwebsite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'DDAPIwebsiteDB',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'USER': 'admin',
+        'PASSWORD': 'Democracy805Digital',
+        'OPTIONS': {
+            'autocommit': True,
+        }
     }
 }
 
