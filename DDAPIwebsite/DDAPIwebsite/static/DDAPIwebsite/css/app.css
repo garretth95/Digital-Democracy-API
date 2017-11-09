@@ -1,0 +1,53 @@
+
+body.back {
+	background: url('../images/internet.png') no-repeat center center;
+	background-size: cover;
+	background-attachment: fixed;
+	font: 20px "Century Gothic";
+	margin: 100px;
+	width: auto;
+}
+
+
+.inner-box {
+	position:absolute;
+  background:rgba(255, 255, 255, 0.9);
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  padding: 30px;
+  text-align:center;
+}
+
+.mybutton {
+  font: 10px bold "Century Gothic";
+  text-decoration: none;
+	text-align: center;
+  background-color: ghostwhite;
+  color: black;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+}
+
+form  {
+	display: table;
+}
+
+p     {
+	display: table-row;
+}
+
+label {
+	display: table-cell;
+}
+
+input {
+	display: table-cell;
+}
+
+.centered {
+	display: table-row;
+}
