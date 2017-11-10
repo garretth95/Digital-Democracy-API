@@ -25,7 +25,7 @@ SECRET_KEY = '_y04lar-d_)uqxp+-#a7og^mo3s*p4948aj-sh#*l7e_ndolrs'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'api.digitaldemocracy.org']
 
 
 # Application definition
