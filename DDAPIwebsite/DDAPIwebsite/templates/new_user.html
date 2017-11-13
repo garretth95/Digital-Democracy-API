@@ -1,0 +1,26 @@
+<!doctype html>
+
+{% load static %}
+
+<html lang="en" dir="ltr">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>New User</title>
+		<link rel="stylesheet" href="{% static '/DDAPIwebsite/css/app.css' %}">
+		<link rel="shortcut icon" href="{% static 'DDAPIwebsite/images/favicon.ico' %}" />
+	</head>
+
+	<body class="back">
+
+		<div class="inner-box">
+			{% if user %}
+				<h1>Hi, {{ user.first_name }}.<br>Thanks for signing up for Digital Democracy API.</h1>
+				<h2>Your API Key is:  <strong>{{ user.key }}</strong><br><br>
+				Copy this key and save it somewhere safe, it's required for making API requests.</h2>
+			{% endif %}
+		</div>
+	</body>
+</html>

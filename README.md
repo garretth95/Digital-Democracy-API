@@ -3,11 +3,12 @@ api dev project
 Read me for Digital Democracy API
 WIP
 
+To run locally and connect to DB remotely:
 
-TO RUN FROM SERVER AND PORT TO LOCAL MACHINE:
+log into mysql with admin on remote server:
+$ mysql -u admin -p
 
-local machine:
-$ ssh -i .ssh/ddkey -L 8080:localhost:80 <CP username>@api.digitaldemocracy.org
+> GRANT ALL PRIVILEGES ON somedatabase.* TO someuser@'somehostname' IDENTIFIED BY 'password';
+> FLUSH PRIVILEGES;
 
-linux server:
-[<CP username@ip}$ sudo python3 manage.py runserver 0.0.0.0:80
+'somehostname' being your public IP

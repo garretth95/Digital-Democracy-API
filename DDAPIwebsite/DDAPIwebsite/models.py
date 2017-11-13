@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 
 
 class User(models.Model):
@@ -7,3 +8,4 @@ class User(models.Model):
     email = models.CharField(max_length=200)
     key = models.CharField(max_length=200)
     user_group = models.CharField(max_length=200)
+

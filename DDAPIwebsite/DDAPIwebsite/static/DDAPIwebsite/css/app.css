@@ -20,7 +20,7 @@ body.back {
 }
 
 .mybutton {
-  font: 10px bold "Century Gothic";
+  font: 15px bold "Century Gothic";
   text-decoration: none;
 	text-align: center;
   background-color: ghostwhite;
@@ -32,11 +32,11 @@ body.back {
   border-left: 1px solid #CCCCCC;
 }
 
-.tbl  {
+.tbl {
 	display: table;
 }
 
-p     {
+p {
 	display: table-row;
 }
 

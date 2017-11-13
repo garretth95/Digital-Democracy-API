@@ -8,47 +8,92 @@
 		<meta charset="utf-8">
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>New User</title>
+		<title>Request Access</title>
 		<link rel="stylesheet" href="{% static '/DDAPIwebsite/css/app.css' %}">
+		<link rel="shortcut icon" href="{% static 'DDAPIwebsite/images/favicon.ico' %}" />
 	</head>
-
 
 	<body class="back">
 
+		<style>
+
+			.alert {
+			    padding: 20px;
+			    background-color: orange;
+			    color: black;
+			}
+
+			.closebtn {
+			    margin-left: 15px;
+			    color: black;
+			    font-weight: bold;
+			    float: right;
+			    font-size: 50px;
+			    line-height: 20px;
+			    cursor: pointer;
+			    transition: 0.3s;
+			}
+
+			.closebtn:hover {
+			    color: white;
+			}
+		</style>
+
+		{% if form %}
+			{% for field in form %}
+				{% if field.errors %}
+				<div class="alert">
+					<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+					{{ field.errors }}
+				</div>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+
+		{% if email_error %}
+			<div class="alert">
+				<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+					{{ email_error }}
+			</div>
+		{% endif %}
+
 		<div class="inner-box">
 
-			<img src="{% static '/DDAPIwebsite/images/DD-API.png' %}" height="200">
+			<img src="{% static '/DDAPIwebsite/images/DD-API.png' %}" height="300">
 			<br>
 			<br>
 
-			<form action="/new-user/" method="POST">
-				<div class="tbl">
+			<form action="/new_user/" method="POST">
+				{% csrf_token %}
+				<div class="tbl" style="font-size: 27px">
 					<p>
 						<label for="new_user">First Name: </label>
-						<input align="center" id="first_name" type="text" name="new_user" value="{{ first_name }}" required>
+						<input align="center" id="first_name" type="text" name="first_name"
+						       style="font-size: 20px; height: 25px;" value="{{ first_name }}" required />
 					</p>
 
 					<p>
 						<label for="new_user">Last Name: </label>
-						<input align="center" id="last_name" type="text" name="new_user" value="{{ last_name }}" required>
+						<input align="center" id="last_name" type="text" name="last_name"
+						       style="font-size: 20px; height: 25px;" value="{{ last_name }}" required />
 					</p>
 
 					<p>
 						<label for="new_user">Email: </label>
-						<input align="center" id="email" type="text" name="new_user" value="{{ email }}" required>
+						<input align="center" id="email" type="email" name="email" value="{{ email }}" required
+						style="font-size: 20px; height: 25px;" />
 					</p>
 
 					<p>
-						<label for="new_user" style="padding-right: 5px">Confirm Email:</label>
-						<input align="center" id="email_conf" type="text" name="new_user" value="{{ email_conf }}" required>
+						<label for="new_user" style="padding-right: 10px">Confirm Email:</label>
+						<input align="center" id="email_conf" type="email" name="email_conf"
+						       style="font-size: 20px; height: 25px;" value="{{ email_conf }}" required />
 					</p>
-
-	{#				probably need more fields#}
 
 					<br>
 
 				</div>
-				<input class="mybutton" type="submit" value="Submit" style="text-align: center">
+				<input class="mybutton" type="submit" value="Submit" style="text-align: center; font-size: 17px" />
 			</form>
 		</div>
 
