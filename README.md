@@ -15,8 +15,15 @@ $ mysql -u admin -p
 
 'somehostname' being your public IP and 'sumeuser' being admin
 
+now you can run from your local IDE
 
 
 To run remotely and connect to DB locally:
 
-just make sure DATABASE setting is set host to local
+just make sure DATABASE settings are set host to local
+
+in the first DDAPIwebsite app directory:
+$ sudo python3 manage.py runserver 0.0.0.0:80
+
+now the app should run remotely from the server and can be accessed
+from api.digitaldemocracy.org
