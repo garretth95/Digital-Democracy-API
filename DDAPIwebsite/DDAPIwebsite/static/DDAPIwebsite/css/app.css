@@ -15,7 +15,7 @@ body.back {
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  padding: 30px;
+  padding: 40px;
   text-align:center;
 }
 
@@ -25,6 +25,7 @@ body.back {
 	text-align: center;
   background-color: ghostwhite;
   color: black;
+	cursor: pointer;
   padding: 2px 6px 2px 6px;
   border-top: 1px solid #CCCCCC;
   border-right: 1px solid #333333;

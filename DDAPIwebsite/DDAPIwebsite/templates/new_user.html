@@ -11,15 +11,34 @@
 		<title>New User</title>
 		<link rel="stylesheet" href="{% static '/DDAPIwebsite/css/app.css' %}">
 		<link rel="shortcut icon" href="{% static 'DDAPIwebsite/images/favicon.ico' %}" />
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 	</head>
+
+	<script type="text/javascript">
+		function copyToClipboard(element) {
+			var $temp = $("<input>");
+			$("body").append($temp);
+			$temp.val($(element).text()).select();
+			document.execCommand("copy");
+			$temp.remove();
+		}
+	</script>
 
 	<body class="back">
 
 		<div class="inner-box">
 			{% if user %}
 				<h1>Hi, {{ user.first_name }}.<br>Thanks for signing up for Digital Democracy API.</h1>
-				<h2>Your API Key is:  <strong>{{ user.key }}</strong><br><br>
-				Copy this key and save it somewhere safe, it's required for making API requests.</h2>
+				<h3 style="padding-bottom: 1px">Your API Key is:</h3>
+				<b id="key" style="color: cornflowerblue; padding-bottom: 10px" align="center">
+					{{ user.key }}
+				</b>
+				<br/>
+				<button class="mybutton" onclick="copyToClipboard('#key')" style="cursor: pointer; font-size: 17px;">
+					COPY
+				</button>
+				<br/><br/>
+				Copy this key and save it somewhere safe, it's required for making API requests.
 			{% endif %}
 		</div>
 	</body>

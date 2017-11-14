@@ -3,6 +3,7 @@ from django.shortcuts import render
 from . import templates
 from .forms import UserForm
 from .models import User
+from itsdangerous import URLSafeSerializer
 
 
 def index(request):
@@ -23,8 +24,13 @@ def new_user(request):
         # if the form submitted is valid
         if form.is_valid():
             user_dict = form.cleaned_data
+
+            s = URLSafeSerializer('secret-key')
+            key = s.dumps(user_dict.get('email'))
+
+
             user = User(first_name=user_dict.get('first_name'), last_name=user_dict.get('last_name'),
-                        email=user_dict.get('email'), key='API KEY', user_group='base user group')
+                        email=user_dict.get('email'), key=key, user_group='base user group')
 
             # don't add user to the db if they already exist
             if not User.objects.filter(email=user.email).exists():
