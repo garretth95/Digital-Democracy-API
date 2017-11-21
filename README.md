@@ -13,7 +13,7 @@ $ mysql -u admin -p
 > GRANT ALL PRIVILEGES ON somedatabase.* TO someuser@'somehostname' IDENTIFIED BY 'password';
 > FLUSH PRIVILEGES;
 
-'somehostname' being your public IP and 'sumeuser' being admin
+'somehostname' being your public IP and 'someuser' being admin
 
 now you can run from your local IDE
 
