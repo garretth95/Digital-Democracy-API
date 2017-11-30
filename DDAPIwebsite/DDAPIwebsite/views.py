@@ -4,6 +4,7 @@ from . import templates
 from .forms import UserForm
 from .models import User
 from itsdangerous import URLSafeSerializer
+import time
 
 
 def index(request):
@@ -25,8 +26,8 @@ def new_user(request):
         if form.is_valid():
             user_dict = form.cleaned_data
 
-            s = URLSafeSerializer('secret-key')
-            key = s.dumps(user_dict.get('email'))
+            s = URLSafeSerializer(user_dict.get('email'))
+            key = s.dumps(str(int(time.time()*100)))
 
 
             user = User(first_name=user_dict.get('first_name'), last_name=user_dict.get('last_name'),
