@@ -78,14 +78,22 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'DDAPIwebsiteDB',
-        'HOST': '127.0.0.1',
-        # 'HOST': 'api.digitaldemocracy.org',
+        # 'HOST': '127.0.0.1',
+        'HOST': 'api.digitaldemocracy.org',
         'PORT': '3306',
         'USER': 'admin',
         'PASSWORD': 'Democracy805Digital',
         'OPTIONS': {
             'autocommit': True,
         }
+    },
+    'apiDB': {
+        'NAME': 'DDDB2016Aug',
+        'ENGINE': 'django.db.backends.mysql',
+        'PORT': '3306',
+        'HOST': 'dev.digitaldemocracy.org',
+        'USER': 'pupil',
+        'PASSWORD': 'slolife805'
     }
 }
 

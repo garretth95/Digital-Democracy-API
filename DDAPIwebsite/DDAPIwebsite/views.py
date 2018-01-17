@@ -6,12 +6,15 @@ from .models import User
 from itsdangerous import URLSafeSerializer
 import time
 
+from .queryDB import test_get_bill_text
+
 
 def index(request):
     return render(request, 'index.html')
 
 
 def request_access(request):
+    print(test_get_bill_text())  # THIS IS FOR TESTING, WILL REMOVE
     return render(request, "request_access.html")
 
 
@@ -47,4 +50,23 @@ def new_user(request):
             return render(request, 'request_access.html', {'form': form})
 
     return HttpResponseRedirect('/request_access/')
+
+# # @api_view(['GET'])
+# def bill_text(request, bid):
+#
+#     # if not bid:
+#     #     try:
+#     #         # get(bid=bid)
+#     #
+#     #     except: # bill doesn't exist
+#     #
+#     #
+#     #     if request.method == 'GET':
+#     #         return
+#     #
+#     # else:
+#     #     return HttpResponseNotFound
+#     # return '<h1>' + bid + '</h1>'
+
+
 
