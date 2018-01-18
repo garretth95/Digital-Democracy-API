@@ -10,10 +10,8 @@ make sure DATABASE settings are set host to remote
 log into mysql with admin on remote server:
 $ mysql -u admin -p
 
-> GRANT ALL PRIVILEGES ON somedatabase.* TO someuser@'somehostname' IDENTIFIED BY 'password';
+> GRANT ALL PRIVILEGES ON DDAPIwebsiteDB.* TO admin@'<your public ip>' IDENTIFIED BY '<password>';
 > FLUSH PRIVILEGES;
-
-'somehostname' being your public IP and 'someuser' being admin
 
 now you can run from your local IDE
 

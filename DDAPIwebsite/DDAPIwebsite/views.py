@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse, HttpResponseNotAllowed
 from django.shortcuts import render
 from . import templates
 from .forms import UserForm
@@ -14,7 +14,6 @@ def index(request):
 
 
 def request_access(request):
-    print(test_get_bill_text())  # THIS IS FOR TESTING, WILL REMOVE
     return render(request, "request_access.html")
 
 
@@ -31,7 +30,6 @@ def new_user(request):
 
             s = URLSafeSerializer(user_dict.get('email'))
             key = s.dumps(str(int(time.time()*100)))
-
 
             user = User(first_name=user_dict.get('first_name'), last_name=user_dict.get('last_name'),
                         email=user_dict.get('email'), key=key, user_group='base user group')
@@ -51,22 +49,37 @@ def new_user(request):
 
     return HttpResponseRedirect('/request_access/')
 
-# # @api_view(['GET'])
-# def bill_text(request, bid):
-#
-#     # if not bid:
-#     #     try:
-#     #         # get(bid=bid)
-#     #
-#     #     except: # bill doesn't exist
-#     #
-#     #
-#     #     if request.method == 'GET':
-#     #         return
-#     #
-#     # else:
-#     #     return HttpResponseNotFound
-#     # return '<h1>' + bid + '</h1>'
+
+def check_api_key(email, key):  # checks User DB to see if key matches email
+
+    if User.objects.get(email=email).key == key:
+        return True
+    else:
+        return False
+
+
+# @api_view(['GET'])  # may need for api classes
+def test_get(request):
+
+    if request.method == 'GET':
+
+        if 'HTTP_EMAIL' in request.META and 'HTTP_API_KEY' in request.META\
+                and User.objects.filter(email=request.META.get('HTTP_EMAIL')).exists()\
+                and check_api_key(request.META.get('HTTP_EMAIL'), request.META.get('HTTP_API_KEY')):
+
+            # check that email & key are in header, email exists, and email matches key
+
+            row = test_get_bill_text()  # will change
+            response = JsonResponse({'bill': {'text': row}})  # return data in json form
+
+            return HttpResponse(response)
+
+        else:
+            return HttpResponse('<h1>Sorry, you don\'t have access to this<h1>')
+
+    return HttpResponseNotFound
+
+
 
 
 
