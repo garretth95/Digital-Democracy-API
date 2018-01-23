@@ -75,11 +75,12 @@ def test_get(request):
             return HttpResponse(response)
 
         else:
-            return HttpResponse('<h1>Sorry, you don\'t have access to this<h1>')
+            return HttpResponseRedirect('/no_access/')
 
     return HttpResponseNotFound
 
 
-
+def no_access(request):
+    return render(request, 'no_access.html')
 
 

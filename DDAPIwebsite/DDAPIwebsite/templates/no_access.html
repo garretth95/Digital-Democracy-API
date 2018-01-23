@@ -1,0 +1,40 @@
+<!doctype html>
+
+{% load static %}
+
+<html lang="en" dir="ltr">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Sorry!</title>
+		<link rel="stylesheet" href="{% static '/DDAPIwebsite/css/app.css' %}">
+		<link rel="shortcut icon" href="{% static 'DDAPIwebsite/images/favicon.ico' %}" />
+	</head>
+
+	<style>
+		.alert {
+			padding: 20px;
+			background-color: orange;
+			color: black;
+			position: relative;
+			z-index: 1000;
+		}
+	</style>
+
+	<div class="alert">ALERT:&ensp;THIS SITE IS CURRENTLY UNDER DEVELOPMENT</div><br>
+
+	<body class="back">
+
+		<div class="inner-box">
+
+			<h1>Sorry, you don't have access to this.</h1>
+
+{#			<img src="{% static '/DDAPIwebsite/images/DD-API.png' %}" height="350">#}
+
+
+		</div>
+	</body>
+
+</html>
