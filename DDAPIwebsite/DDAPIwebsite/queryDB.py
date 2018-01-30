@@ -10,6 +10,7 @@ def test_get_bill_text():
 
 def hearing_transcript(hid):
     cursor = connections['apiDB'].cursor()
-    cursor.execute('select p.first, p.last, u.text from Hearing h, Video v, Utterance u, Person p '
-                   'where h.hid = v.hid and v.vid = u.vid and u.pid = p.pid and h.hid = ' + hid)
+    cursor.execute('select p.first, p.last, u.time, u.endTime, u.text '
+                   'from Hearing h, Video v, Utterance u left join Person p on u.pid = p.pid '
+                   'where h.hid = v.hid and v.vid = u.vid and h.hid = ' + hid + ' order by u.uid')
     return cursor.fetchall()

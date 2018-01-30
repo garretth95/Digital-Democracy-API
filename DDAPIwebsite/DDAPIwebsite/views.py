@@ -85,7 +85,7 @@ def no_access(request):
     return render(request, 'no_access.html')
 
 
-def hearing(request, hid=None):
+def hearing(request, hid):
     if request.method == 'GET' and hid is not None and int(hid) > 0:
 
         # print('hid', hid)
@@ -100,7 +100,24 @@ def hearing(request, hid=None):
 
             if len(sql_rows) > 0:
 
-                return HttpResponse(json.dumps({'Hearing Transcript': sql_rows}), content_type="application/json")
+                json_rows = []
+                i = 1
+
+                for row in sql_rows:
+                    if row[0] is None:
+                        name = {'name': 'NA'}
+                    else:
+                        name = {'name': {'last': row[1], 'first': row[0]}}
+                    talk_time = {'time': {'start': row[2], 'end': row[3]}}
+                    text = {'text': row[4]}
+
+                    utterance = {'utterance ' + str(i): [name, talk_time, text]}
+                    i += 1
+
+                    json_rows.append(utterance)
+
+                return HttpResponse(json.dumps({'Transcript for Hearing id ' + hid: json_rows}),
+                                    content_type="application/json")
 
         else:
             return HttpResponse('Unauthorized', status=401)
