@@ -1,12 +1,13 @@
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse, HttpResponseNotAllowed
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render
 from . import templates
 from .forms import UserForm
 from .models import User
 from itsdangerous import URLSafeSerializer
 import time
+import json
 
-from .queryDB import test_get_bill_text
+from .queryDB import test_get_bill_text, hearing_transcript
 
 
 def index(request):
@@ -50,9 +51,11 @@ def new_user(request):
     return HttpResponseRedirect('/request_access/')
 
 
-def check_api_key(email, key):  # checks User DB to see if key matches email
+def check_api_key(email, key):  # checks User DB to see if email exists and key matches email
 
-    if User.objects.get(email=email).key == key:
+    # print(email, key)
+
+    if User.objects.filter(email=email).exists() and User.objects.get(email=email).key == key:
         return True
     else:
         return False
@@ -64,23 +67,44 @@ def test_get(request):
     if request.method == 'GET':
 
         if 'HTTP_EMAIL' in request.META and 'HTTP_API_KEY' in request.META\
-                and User.objects.filter(email=request.META.get('HTTP_EMAIL')).exists()\
                 and check_api_key(request.META.get('HTTP_EMAIL'), request.META.get('HTTP_API_KEY')):
 
             # check that email & key are in header, email exists, and email matches key
 
-            row = test_get_bill_text()  # will change
-            response = JsonResponse({'bill': {'text': row}})  # return data in json form
-
-            return HttpResponse(response)
+            row = test_get_bill_text()
+            return HttpResponse(json.dumps({'bill': {'text': row}, }), content_type="application/json")
 
         else:
-            return HttpResponseRedirect('/no_access/')
+            # return HttpResponseRedirect('/no_access/')
+            return HttpResponse('Unauthorized', status=401)
 
-    return HttpResponseNotFound
+    return HttpResponseNotFound(request)
 
 
 def no_access(request):
     return render(request, 'no_access.html')
+
+
+def hearing(request, hid=None):
+    if request.method == 'GET' and hid is not None and int(hid) > 0:
+
+        print('hid', hid)
+
+        if 'HTTP_EMAIL' in request.META and 'HTTP_API_KEY' in request.META\
+                and check_api_key(request.META.get('HTTP_EMAIL'), request.META.get('HTTP_API_KEY')):
+
+            try:
+                sql_rows = hearing_transcript(hid)
+            except TypeError:
+                return HttpResponseNotFound
+
+            if len(sql_rows) > 0:
+
+                return HttpResponse(json.dumps({'Hearing Transcript': sql_rows}), content_type="application/json")
+
+        else:
+            return HttpResponse('Unauthorized', status=401)
+
+    return HttpResponseNotFound(request)
 
 

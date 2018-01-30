@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.contrib import admin
 from . import views
+from django.http import HttpResponseNotFound
 
 app_name = 'DDAPIwebsite'
 urlpatterns = [
@@ -10,5 +11,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^test_get/', views.test_get, name='test_get'),
     url(r'^no_access/', views.no_access, name='no_access'),
-    # url(r'^bill_text/(?P<bid>[\w\-]+)/$', views.bill_text, name='bill_text'),
+    url(r'^hearing/(?P<hid>[0-9]+)/', views.hearing, name='hearing'),
 ]

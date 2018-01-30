@@ -78,8 +78,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'DDAPIwebsiteDB',
-        # 'HOST': '127.0.0.1',
-        'HOST': 'api.digitaldemocracy.org',
+        'HOST': '127.0.0.1',
+        # 'HOST': 'api.digitaldemocracy.org',
         'PORT': '3306',
         'USER': 'admin',
         'PASSWORD': 'Democracy805Digital',
