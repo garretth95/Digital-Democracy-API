@@ -88,7 +88,7 @@ def no_access(request):
 def hearing(request, hid=None):
     if request.method == 'GET' and hid is not None and int(hid) > 0:
 
-        print('hid', hid)
+        # print('hid', hid)
 
         if 'HTTP_EMAIL' in request.META and 'HTTP_API_KEY' in request.META\
                 and check_api_key(request.META.get('HTTP_EMAIL'), request.META.get('HTTP_API_KEY')):
