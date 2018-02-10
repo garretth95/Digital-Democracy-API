@@ -1,4 +1,5 @@
 from django.db import connections
+from . import API_settings
 
 
 def test_get_bill_text():
@@ -9,8 +10,24 @@ def test_get_bill_text():
 
 
 def hearing_transcript(hid):
-    cursor = connections['apiDB'].cursor()
-    cursor.execute('select p.first, p.last, u.time, u.endTime, u.text '
-                   'from Hearing h, Video v, Utterance u left join Person p on u.pid = p.pid '
-                   'where h.hid = v.hid and v.vid = u.vid and h.hid = ' + hid + ' order by u.uid')
-    return cursor.fetchall()
+
+    query = API_settings.HEARING_ID_STRING % str(hid)
+
+    # result = check_cache(query)  # get json object from cache, or null
+    result = None
+
+    if result is None:  # if the query was not in the cache
+
+        # database stuff
+        cursor = connections['apiDB'].cursor()
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+        # convert to json here
+        # result = convert to json (rows)
+
+        # add_to_cache(query, result)  # add SQL string and json to cache
+        result = rows  # remove this after we convert to json
+
+    return result
+
