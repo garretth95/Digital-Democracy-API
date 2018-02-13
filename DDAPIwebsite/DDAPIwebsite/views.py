@@ -1,13 +1,22 @@
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse
+import json
+import time
+import re
+from _datetime import datetime
+from datetime import timedelta, datetime
+
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
-from . import templates
+from itsdangerous import URLSafeSerializer
+
 from .forms import UserForm
 from .models import User
-from itsdangerous import URLSafeSerializer
-import time
-import json
-
 from .queryDB import test_get_bill_text, hearing_transcript
+from .routes import RequestModule
+
+billTypeDict = ['A', 'AB', 'ABX1', 'ABX2', 'ACA', 'ACR', 'ACRX2', 'AJR', 'B', 'BUD', 'C', 'E', 'HB', 'HCR', 'HJR',
+                'HM', 'HR', 'J', 'K', 'L', 'NON', 'R', 'S', 'SB', 'SBX1', 'SBX2', 'SCA', 'SCAX1', 'SCR', 'SCRX1',
+                'SCRX2', 'SJR', 'SM', 'SPB', 'SR', 'SRX1', 'SRX2']
+paramters = ['state', 'date', 'committee', 'billType', 'billNumber', 'callType']
 
 
 def index(request):
@@ -19,7 +28,6 @@ def request_access(request):
 
 
 def new_user(request):
-
     # form submission, if GET then probably a refresh -> will redirect
     if request.method == 'POST':
 
@@ -30,7 +38,7 @@ def new_user(request):
             user_dict = form.cleaned_data
 
             s = URLSafeSerializer(user_dict.get('email'))
-            key = s.dumps(str(int(time.time()*100)))
+            key = s.dumps(str(int(time.time() * 100)))
 
             user = User(first_name=user_dict.get('first_name'), last_name=user_dict.get('last_name'),
                         email=user_dict.get('email'), key=key, user_group='base user group')
@@ -63,10 +71,9 @@ def check_api_key(email, key):  # checks User DB to see if email exists and key 
 
 # @api_view(['GET'])  # may need for api classes
 def test_get(request):
-
     if request.method == 'GET':
 
-        if 'HTTP_EMAIL' in request.META and 'HTTP_API_KEY' in request.META\
+        if 'HTTP_EMAIL' in request.META and 'HTTP_API_KEY' in request.META \
                 and check_api_key(request.META.get('HTTP_EMAIL'), request.META.get('HTTP_API_KEY')):
 
             # check that email & key are in header, email exists, and email matches key
@@ -90,7 +97,7 @@ def hearing(request, hid):
 
         # print('hid', hid)
 
-        if 'HTTP_EMAIL' in request.META and 'HTTP_API_KEY' in request.META\
+        if 'HTTP_EMAIL' in request.META and 'HTTP_API_KEY' in request.META \
                 and check_api_key(request.META.get('HTTP_EMAIL'), request.META.get('HTTP_API_KEY')):
 
             try:
@@ -125,3 +132,34 @@ def hearing(request, hid):
     return HttpResponseNotFound(request)
 
 
+def service(request):
+    list = request.GET.keys()
+    for para in list:
+        if para not in paramters:
+            return HttpResponse("Parameter " + para + " is not valid", status=404)
+
+    inputDate = request.GET.get('date', '')
+    state = request.GET.get('state', '')
+    committee = request.GET.get('committee', '')
+    billType = request.GET.get('billType', '')
+    billNumber = request.GET.get('billNumber', '')
+    callType = request.GET.get('callType', '')
+    date = None
+
+    if inputDate.__len__() > 0:
+        try:
+            date = datetime.strptime(inputDate, '%Y-%m-%d')
+        except ValueError:
+            return HttpResponse("Incorrect data format, should be YYYY-MM-DD", status=404)
+        if date.date() > (datetime.today() - timedelta(1)).date():
+            return HttpResponse("Date must be before today", status=404)
+
+    if billType.__len__() > 0 and billType not in billTypeDict:
+        return HttpResponse("Bill type " + billType + " is not valid", status=404)
+
+    if billNumber.__len__() > 0 and (not re.match("^[A-Za-z0-9_-]*$", billNumber) or billNumber.__len__() > 10):
+        return HttpResponse("Bill number " + billNumber + " is not valid", status=404)
+
+    requestObject = RequestModule(date.date().__str__(), state, committee, billType, billNumber, callType)
+
+    return HttpResponse(requestObject)

@@ -12,4 +12,6 @@ urlpatterns = [
     url(r'^test_get/', views.test_get, name='test_get'),
     url(r'^no_access/', views.no_access, name='no_access'),
     url(r'^hearing/(?P<hid>[0-9]+)/', views.hearing, name='hearing'),
+    url(r'^service', views.service, name='service'),
+
 ]
