@@ -1,6 +1,9 @@
 # This is a comment
 # API file by
 # First API revision
+
 @ hearing_transcript_by_id
 param hid Integer
-SQL 'select p.first, p.last, u.time, u.endTime, u.text from Hearing h, Video v, Utterance u left join Person p on u.pid = p.pid where h.hid = v.hid and v.vid = u.vid and h.hid = %s order by u.uid'
+SQL 'select p.first, p.last, u.time, u.endTime, u.text from Hearing h, Video v, Utterance u left join Person p on u.pid = p.pid where h.hid = v.hid and v.vid = u.vid and h.hid = $$hid$$ order by u.uid'
+
+
