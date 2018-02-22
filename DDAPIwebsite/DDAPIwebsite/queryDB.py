@@ -1,5 +1,29 @@
 from django.db import connections
 from . import API_settings
+from .routes import RequestBox
+
+
+def box_to_json(box):
+
+    if box.callType is None:
+        print('this shouldn\'t happen')
+    else:
+        print('passed front-end checking')
+
+        # convert to SQL string here
+
+        # check cache here
+
+        # if not in cache, query DB and convert to json
+
+    return {'test json': 'test json'}
+
+
+def get_from_DB(query):
+    cursor = connections['apiDB'].cursor()
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    return rows
 
 
 def test_get_bill_text():

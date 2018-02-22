@@ -11,12 +11,18 @@ from itsdangerous import URLSafeSerializer
 from .forms import UserForm
 from .models import User
 from .queryDB import test_get_bill_text, hearing_transcript
-from .routes import RequestModule
+from .routes import RequestBox
+from .queryDB import box_to_json
+
+from .call import parse_api_calls
 
 billTypeDict = ['A', 'AB', 'ABX1', 'ABX2', 'ACA', 'ACR', 'ACRX2', 'AJR', 'B', 'BUD', 'C', 'E', 'HB', 'HCR', 'HJR',
                 'HM', 'HR', 'J', 'K', 'L', 'NON', 'R', 'S', 'SB', 'SBX1', 'SBX2', 'SCA', 'SCAX1', 'SCR', 'SCRX1',
                 'SCRX2', 'SJR', 'SM', 'SPB', 'SR', 'SRX1', 'SRX2']
-paramters = ['state', 'date', 'committee', 'billType', 'billNumber', 'callType']
+avail_params = ['state', 'date', 'committee', 'billType', 'billNumber', 'callType']
+avail_call_types = ['full_hearing', 'test']  # will add many more
+
+api_calls = parse_api_calls('sampleAPIcalls')
 
 
 def index(request):
@@ -127,39 +133,64 @@ def hearing(request, hid):
                                     content_type="application/json")
 
         else:
-            return HttpResponse('Unauthorized', status=401)
+            return HttpResponse('<h1>Error 401: Unauthorized</h1>', status=401)
 
     return HttpResponseNotFound(request)
 
 
 def service(request):
-    list = request.GET.keys()
-    for para in list:
-        if para not in paramters:
-            return HttpResponse("Parameter " + para + " is not valid", status=404)
 
-    inputDate = request.GET.get('date', '')
-    state = request.GET.get('state', '')
-    committee = request.GET.get('committee', '')
-    billType = request.GET.get('billType', '')
-    billNumber = request.GET.get('billNumber', '')
-    callType = request.GET.get('callType', '')
-    date = None
+    if request.method == 'GET':
 
-    if inputDate.__len__() > 0:
-        try:
-            date = datetime.strptime(inputDate, '%Y-%m-%d')
-        except ValueError:
-            return HttpResponse("Incorrect data format, should be YYYY-MM-DD", status=404)
-        if date.date() > (datetime.today() - timedelta(1)).date():
-            return HttpResponse("Date must be before today", status=404)
+        if 'HTTP_EMAIL' in request.META and 'HTTP_API_KEY' in request.META \
+                and check_api_key(request.META.get('HTTP_EMAIL'), request.META.get('HTTP_API_KEY')):
 
-    if billType.__len__() > 0 and billType not in billTypeDict:
-        return HttpResponse("Bill type " + billType + " is not valid", status=404)
+            param_list = request.GET.keys()
 
-    if billNumber.__len__() > 0 and (not re.match("^[A-Za-z0-9_-]*$", billNumber) or billNumber.__len__() > 10):
-        return HttpResponse("Bill number " + billNumber + " is not valid", status=404)
+            if len(param_list) > 0:
+                for param in param_list:
+                    if param not in avail_params:
+                        return HttpResponse("Parameter " + param + " is not valid", status=404)
 
-    requestObject = RequestModule(date.date().__str__(), state, committee, billType, billNumber, callType)
+                inputDate = request.GET.get('date', '')
+                state = request.GET.get('state', '')
+                committee = request.GET.get('committee', '')
+                billType = request.GET.get('billType', '')
+                billNumber = request.GET.get('billNumber', '')
+                callType = request.GET.get('callType', '')
+                date = None
 
-    return HttpResponse(requestObject)
+                if len(callType) == 0:
+                    return HttpResponse('<h1>Error 400: callType parameter is required to make a request.</h1>',
+                                        status=400)
+
+                if callType not in avail_call_types:
+                    return HttpResponse('<h1>Error 400: "' + callType + '" is not a valid callType.</h1>', status=400)
+
+                if len(inputDate) > 0:
+                    try:
+                        date = datetime.strptime(inputDate, '%Y-%m-%d')
+                    except ValueError:
+                        return HttpResponse("Incorrect data format, should be YYYY-MM-DD", status=400)
+                    if date.date() > (datetime.today() - timedelta(1)).date():
+                        return HttpResponse("Date must be before today", status=400)
+
+                if len(billType) > 0 and billType not in billTypeDict:
+                    return HttpResponse("Bill type " + billType + " is not valid", status=400)
+
+                if len(billNumber) > 0 and (not re.match("^[A-Za-z0-9_-]*$", billNumber) or billNumber.__len__() > 10):
+                    return HttpResponse("Bill number " + billNumber + " is not valid", status=400)
+
+                json_obj = box_to_json(RequestBox(inputDate, state, committee, billType, billNumber,
+                                                  callType))
+
+                return HttpResponse(json.dumps(json_obj), content_type="application/json")
+
+            else:
+                return HttpResponse('<h1>Error 400: No parameters defined</h1>', status=400)
+
+        else:
+            return HttpResponse('<h1>Error 401: Unauthorized</h1>', status=401)
+
+    return HttpResponseNotFound(request)
+
