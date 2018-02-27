@@ -1,5 +1,6 @@
 import json
 import time
+import os
 import re
 from _datetime import datetime
 from datetime import timedelta, datetime
@@ -14,12 +15,14 @@ from .queryDB import get_json_from_backend
 
 from .call import parse_api_calls, replace_variables
 
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+api_file = os.path.join(THIS_FOLDER, 'sampleAPIcalls.txt')
 
 billTypeDict = ['A', 'AB', 'ABX1', 'ABX2', 'ACA', 'ACR', 'ACRX2', 'AJR', 'B', 'BUD', 'C', 'E', 'HB', 'HCR', 'HJR',
                 'HM', 'HR', 'J', 'K', 'L', 'NON', 'R', 'S', 'SB', 'SBX1', 'SBX2', 'SCA', 'SCAX1', 'SCR', 'SCRX1',
                 'SCRX2', 'SJR', 'SM', 'SPB', 'SR', 'SRX1', 'SRX2']
 
-api_calls = parse_api_calls('DDAPIwebsite/sampleAPIcalls.txt')
+api_calls = parse_api_calls(api_file)
 
 
 def index(request):
