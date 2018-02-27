@@ -1,22 +1,4 @@
 from django.db import connections
-from . import API_settings
-from .routes import RequestBox
-
-
-def box_to_json(box):
-
-    if box.callType is None:
-        print('this shouldn\'t happen')
-    else:
-        print('passed front-end checking')
-
-        # convert to SQL string here
-
-        # check cache here
-
-        # if not in cache, query DB and convert to json
-
-    return {'test json': 'test json'}
 
 
 def get_from_DB(query):
@@ -26,32 +8,17 @@ def get_from_DB(query):
     return rows
 
 
-def test_get_bill_text():
-    cursor = connections['apiDB'].cursor()
-    cursor.execute('select text from BillVersion where bid = "CA_201520160AB1";')  # sample SQL query
-    row = cursor.fetchall()
-    return row
+def get_json_from_backend(query):
+
+    # here is where we'd check if the query exists in the cache
+    # if in cache, return json
+    # if not in cache, then query database
+
+    rows = get_from_DB(query)
+
+    # convert to json here
+
+    return rows
 
 
-def hearing_transcript(hid):
-
-    query = API_settings.HEARING_ID_STRING % str(hid)
-
-    # result = check_cache(query)  # get json object from cache, or null
-    result = None
-
-    if result is None:  # if the query was not in the cache
-
-        # database stuff
-        cursor = connections['apiDB'].cursor()
-        cursor.execute(query)
-        rows = cursor.fetchall()
-
-        # convert to json here
-        # result = convert to json (rows)
-
-        # add_to_cache(query, result)  # add SQL string and json to cache
-        result = rows  # remove this after we convert to json
-
-    return result
 
