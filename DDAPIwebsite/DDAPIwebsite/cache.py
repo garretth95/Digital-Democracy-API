@@ -6,7 +6,12 @@ def generate_key(query):
     return query
 
 
-def check_cache(query):
+def cache_has(query):
+    key = generate_key(query)
+    return cache.get(key) != None
+
+
+def get_from_cache(query):
     key = generate_key(query)
     return cache.get(key)
 
