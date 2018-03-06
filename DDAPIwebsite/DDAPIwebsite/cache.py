@@ -3,6 +3,9 @@ from django.core.cache import cache
 TIMEOUT = 60 * 60 * 6
 
 def generate_key(query):
+    s = query
+    s.replace(" ","")
+    s.replace(".","")
     return query
 
 
