@@ -1,5 +1,10 @@
 from django.db import models
-from django.forms import ModelForm
+
+
+class UserGroup(models.Model):
+    group_id = models.IntegerField(primary_key=True)
+    metering_rate = models.IntegerField()
+    throttling_rate = models.IntegerField()
 
 
 class User(models.Model):
@@ -7,5 +12,6 @@ class User(models.Model):
     last_name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
     key = models.CharField(max_length=200)
-    user_group = models.CharField(max_length=200)
+    user_group = models.ForeignKey(UserGroup)
+
 

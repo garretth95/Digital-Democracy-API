@@ -7,11 +7,17 @@ from .cache import *
 def get_from_DB(query):
 
     # This will get the SQL data as a dictionary
-    cursor = connections['apiDB'].cursor(MySQLdb.cursors.DictCursor)
+    cursor = connections['apiDB'].cursor()
     cursor.execute(query)
-    rows = cursor.fetchall()
 
-    return rows
+    # Returns all rows from a cursor as a dict
+    desc = cursor.description
+    dic = [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
+
+    return dic
 
 
 def get_json_from_backend(query):
@@ -24,16 +30,16 @@ def get_json_from_backend(query):
     else:
         rows = get_from_DB(query)
 
-    def clean_output(o):
-        # Checked for single quote strings
-        if isinstance(o, str):
-            return o.__str__()
-        if isinstance(o, datetime.datetime):
-            # set time to Epoch PST
-            return o.strftime('%s')
-
-    # convert to json here
-    rows = json.dumps(rows, default=clean_output)
+    # def clean_output(o):
+    #     # Checked for single quote strings
+    #     if isinstance(o, str):
+    #         return o.__str__()
+    #     if isinstance(o, datetime.datetime):
+    #         # set time to Epoch PST
+    #         return o.strftime('%s')
+    #
+    # # convert to json here
+    # rows = json.dumps(rows, default=clean_output)
 
     return rows
 

@@ -10,7 +10,7 @@ from django.shortcuts import render
 from itsdangerous import URLSafeSerializer
 
 from .forms import UserForm
-from .models import User
+from .models import User, UserGroup
 from .queryDB import get_json_from_backend
 
 from .call import parse_api_calls, replace_variables
@@ -46,8 +46,10 @@ def new_user(request):
             s = URLSafeSerializer(user_dict.get('email'))
             key = s.dumps(str(int(time.time() * 100)))
 
+            group = UserGroup.objects.get(pk=1)  # default set to 1, as base user group
+
             user = User(first_name=user_dict.get('first_name'), last_name=user_dict.get('last_name'),
-                        email=user_dict.get('email'), key=key, user_group='base user group')
+                        email=user_dict.get('email'), key=key, user_group=group)
 
             # don't add user to the db if they already exist
             if not User.objects.filter(email=user.email).exists():
@@ -74,6 +76,8 @@ def check_api_key(email, key):  # checks User DB to see if email exists and key 
     else:
         return False
 
+
+# Don't really use
 
 def no_access(request):
     return render(request, 'no_access.html')
@@ -123,6 +127,8 @@ def service(request):
 
         if 'HTTP_EMAIL' in request.META and 'HTTP_API_KEY' in request.META \
                 and check_api_key(request.META.get('HTTP_EMAIL'), request.META.get('HTTP_API_KEY')):
+
+            # here is where we would check throttling and metering values
 
             param_list = request.GET.dict()
 
