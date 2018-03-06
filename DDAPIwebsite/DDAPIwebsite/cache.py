@@ -2,6 +2,7 @@ from django.core.cache import cache
 
 TIMEOUT = 60 * 60 * 6
 
+
 def generate_key(query):
     s = query
     s.replace(" ","")
@@ -11,7 +12,7 @@ def generate_key(query):
 
 def cache_has(query):
     key = generate_key(query)
-    return cache.get(key) != None
+    return cache.get(key) is not None
 
 
 def get_from_cache(query):
@@ -21,5 +22,5 @@ def get_from_cache(query):
 
 def set_cache(query, data):
     key = generate_key(query)
-    if (cache.get(key) == None):
+    if cache.get(key) is None:
         cache.set(key, data, TIMEOUT)
