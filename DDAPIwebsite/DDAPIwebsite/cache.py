@@ -5,9 +5,9 @@ TIMEOUT = 60 * 60 * 6
 
 def generate_key(query):
     s = query
-    s.replace(" ","")
-    s.replace(".","")
-    return query
+    s = s.replace(" ","")
+    s = s.replace(".","")
+    return s
 
 
 def cache_has(query):
