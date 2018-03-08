@@ -26,9 +26,12 @@ def get_json_from_backend(query):
     # if in cache, return json
     # if not in cache, then query database
     if cache_has(query):
+        print("you got a hit fam")
         rows = get_from_cache(query)
     else:
+        print("no hit my man")
         rows = get_from_DB(query)
+        set_cache(query, rows)
 
     # def clean_output(o):
     #     # Checked for single quote strings
