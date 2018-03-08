@@ -33,17 +33,6 @@ def get_json_from_backend(query):
         rows = get_from_DB(query)
         set_cache(query, rows)
 
-    # def clean_output(o):
-    #     # Checked for single quote strings
-    #     if isinstance(o, str):
-    #         return o.__str__()
-    #     if isinstance(o, datetime.datetime):
-    #         # set time to Epoch PST
-    #         return o.strftime('%s')
-    #
-    # # convert to json here
-    # rows = json.dumps(rows, default=clean_output)
-
     return rows
 
 
