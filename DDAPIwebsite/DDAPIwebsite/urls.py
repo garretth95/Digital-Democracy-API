@@ -10,7 +10,6 @@ urlpatterns = [
     url(r'^request_access/$', views.request_access, name='request_access'),
     url(r'^admin/', admin.site.urls),
     url(r'^no_access/', views.no_access, name='no_access'),
-    # url(r'^hearing/(?P<hid>[0-9]+)/', views.hearing, name='hearing'),
     url(r'^service', views.service, name='service'),
 
 ]

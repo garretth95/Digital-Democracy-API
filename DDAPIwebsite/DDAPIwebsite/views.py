@@ -82,44 +82,6 @@ def check_api_key(email, key):  # checks User DB to see if email exists and key 
 def no_access(request):
     return render(request, 'no_access.html')
 
-#
-# def hearing(request, hid):
-#     if request.method == 'GET' and hid is not None and int(hid) > 0:
-#
-#         if 'HTTP_EMAIL' in request.META and 'HTTP_API_KEY' in request.META \
-#                 and check_api_key(request.META.get('HTTP_EMAIL'), request.META.get('HTTP_API_KEY')):
-#
-#             try:
-#                 sql_rows = hearing_transcript(hid)
-#             except TypeError:
-#                 return HttpResponseNotFound
-#
-#             if len(sql_rows) > 0:
-#
-#                 json_rows = []
-#                 i = 1
-#
-#                 for row in sql_rows:
-#                     if row[0] is None:
-#                         name = {'name': 'NA'}
-#                     else:
-#                         name = {'name': {'last': row[1], 'first': row[0]}}
-#                     talk_time = {'time': {'start': row[2], 'end': row[3]}}
-#                     text = {'text': row[4]}
-#
-#                     utterance = {'utterance ' + str(i): [name, talk_time, text]}
-#                     i += 1
-#
-#                     json_rows.append(utterance)
-#
-#                 return HttpResponse(json.dumps({'Transcript for Hearing id ' + hid: json_rows}),
-#                                     content_type="application/json")
-#
-#         else:
-#             return HttpResponse('<h1>Error 401: Unauthorized</h1>', status=401)
-#
-#     return HttpResponseNotFound(request)
-
 
 def service(request):
 
