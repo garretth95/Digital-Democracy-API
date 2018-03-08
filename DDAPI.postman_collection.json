@@ -1,0 +1,547 @@
+{
+	"id": "8c5c2c37-5664-f22e-8739-15151139663e",
+	"name": "DDAPI",
+	"description": "",
+	"order": [
+		"f5b335e3-77df-339e-27e2-06f4b51f344b",
+		"7ccde41c-f92e-f055-d45c-bd592232fcb4",
+		"8d726a0f-1c7f-1102-7778-c9cbac5fb957",
+		"f2faed26-f441-b33a-2a96-49699ccb3b60",
+		"d0ea3d26-e289-db0d-8f7d-c466ad4b750e",
+		"60d7428c-745d-3853-230f-f4504bf020a7",
+		"1e6be73a-91dc-dc4a-13f1-5bf9da2297b4",
+		"e9b1a741-e61e-9c69-2828-4fea9d686292",
+		"0a80baee-8429-0a20-820a-635335e9f254"
+	],
+	"folders": [],
+	"folders_order": [],
+	"timestamp": 1516225984454,
+	"owner": "1886751",
+	"public": false,
+	"events": [],
+	"variables": [],
+	"auth": null,
+	"requests": [
+		{
+			"id": "0a80baee-8429-0a20-820a-635335e9f254",
+			"headers": "email: john.doe@gmail.com\napi-key: IjE1MjAzMDI5MDQ0NCI.HvBGNQOZQ30rKG3Pcoya8iv0aVY\n",
+			"headerData": [
+				{
+					"key": "email",
+					"value": "john.doe@gmail.com",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "api-key",
+					"value": "IjE1MjAzMDI5MDQ0NCI.HvBGNQOZQ30rKG3Pcoya8iv0aVY",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{url}}/service?callType=get_hearing_id&date=2017-03-03&committee_name=some_committee&state=CA",
+			"queryParams": [
+				{
+					"key": "callType",
+					"value": "get_hearing_id",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "date",
+					"value": "2017-03-03",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "committee_name",
+					"value": "some_committee",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "state",
+					"value": "CA",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4ec4fb53-371a-44f2-89bf-e9b54fe56b3b",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"200 correct request\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"tests[\"Content-Type is JSON\"] = postman.getResponseHeader(\"Content-Type\") == \"application/json\";"
+						]
+					}
+				}
+			],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"auth": {
+				"type": "noauth"
+			},
+			"time": 1520303129433,
+			"name": "/service john doe get hid",
+			"description": "",
+			"collectionId": "8c5c2c37-5664-f22e-8739-15151139663e",
+			"responses": [],
+			"preRequestScript": null,
+			"tests": "pm.test(\"200 correct request\", function () {\n    pm.response.to.have.status(200);\n});\n\ntests[\"Content-Type is JSON\"] = postman.getResponseHeader(\"Content-Type\") == \"application/json\";",
+			"currentHelper": null,
+			"helperAttributes": null
+		},
+		{
+			"id": "1e6be73a-91dc-dc4a-13f1-5bf9da2297b4",
+			"headers": "email: john.doe@gmail.com\napi-key: IjE1MjAzMDI5MDQ0NCI.HvBGNQOZQ30rKG3Pcoya8iv0aVY\n",
+			"headerData": [
+				{
+					"key": "email",
+					"value": "john.doe@gmail.com",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "api-key",
+					"value": "IjE1MjAzMDI5MDQ0NCI.HvBGNQOZQ30rKG3Pcoya8iv0aVY",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{url}}/service?callType=hearing_transcript_by_id&hid=1",
+			"queryParams": [
+				{
+					"key": "callType",
+					"value": "hearing_transcript_by_id",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "hid",
+					"value": "1",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f5f094da-e1db-43fa-89ca-dcc003ae4a49",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"200 correct request\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"tests[\"Content-Type is JSON\"] = postman.getResponseHeader(\"Content-Type\") == \"application/json\";"
+						]
+					}
+				}
+			],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"auth": {
+				"type": "noauth"
+			},
+			"time": 1520303127481,
+			"name": "/service john doe right callType correct params",
+			"description": "",
+			"collectionId": "8c5c2c37-5664-f22e-8739-15151139663e",
+			"responses": [],
+			"preRequestScript": null,
+			"tests": "pm.test(\"200 correct request\", function () {\n    pm.response.to.have.status(200);\n});\n\ntests[\"Content-Type is JSON\"] = postman.getResponseHeader(\"Content-Type\") == \"application/json\";",
+			"currentHelper": null,
+			"helperAttributes": null
+		},
+		{
+			"id": "60d7428c-745d-3853-230f-f4504bf020a7",
+			"headers": "email: john.doe@gmail.com\napi-key: IjE1MjAzMDI5MDQ0NCI.HvBGNQOZQ30rKG3Pcoya8iv0aVY\n",
+			"headerData": [
+				{
+					"key": "email",
+					"value": "john.doe@gmail.com",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "api-key",
+					"value": "IjE1MjAzMDI5MDQ0NCI.HvBGNQOZQ30rKG3Pcoya8iv0aVY",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{url}}/service?callType=hearing_transcript_by_id",
+			"queryParams": [
+				{
+					"key": "callType",
+					"value": "hearing_transcript_by_id",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "070ece91-f448-4ffd-89f6-4c3b7e9ed07e",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Error 400 missing params\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"require params\");",
+							"    pm.response.to.have.status(400);",
+							"});"
+						]
+					}
+				}
+			],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"auth": {
+				"type": "noauth"
+			},
+			"time": 1520303126417,
+			"name": "/service john doe right callType no other params",
+			"description": "",
+			"collectionId": "8c5c2c37-5664-f22e-8739-15151139663e",
+			"responses": [],
+			"preRequestScript": null,
+			"tests": "pm.test(\"Error 400 missing params\", function () {\n    pm.expect(pm.response.text()).to.include(\"require params\");\n    pm.response.to.have.status(400);\n});",
+			"currentHelper": null,
+			"helperAttributes": null
+		},
+		{
+			"id": "7ccde41c-f92e-f055-d45c-bd592232fcb4",
+			"headers": "email: john.doe@gmail.com\n",
+			"headerData": [
+				{
+					"key": "email",
+					"value": "john.doe@gmail.com",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{url}}/service",
+			"queryParams": [],
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7788cd38-4e1a-420a-baeb-0ea74659de83",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"401 Unauthorized\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Unauthorized\");",
+							"    pm.response.to.have.status(401);",
+							"});"
+						]
+					}
+				}
+			],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"auth": {
+				"type": "noauth"
+			},
+			"time": 1519848232386,
+			"name": "/service no api key",
+			"description": "",
+			"collectionId": "8c5c2c37-5664-f22e-8739-15151139663e",
+			"responses": [],
+			"preRequestScript": null,
+			"tests": "pm.test(\"401 Unauthorized\", function () {\n    pm.expect(pm.response.text()).to.include(\"Unauthorized\");\n    pm.response.to.have.status(401);\n});",
+			"currentHelper": null,
+			"helperAttributes": null
+		},
+		{
+			"id": "8d726a0f-1c7f-1102-7778-c9cbac5fb957",
+			"headers": "api-key: IjE1MjAzMDI5MDQ0NCI.HvBGNQOZQ30rKG3Pcoya8iv0aVY\n",
+			"headerData": [
+				{
+					"key": "api-key",
+					"value": "IjE1MjAzMDI5MDQ0NCI.HvBGNQOZQ30rKG3Pcoya8iv0aVY",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{url}}/service",
+			"queryParams": [],
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7788cd38-4e1a-420a-baeb-0ea74659de83",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"401 Unauthorized\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Unauthorized\");",
+							"    pm.response.to.have.status(401);",
+							"});"
+						]
+					}
+				}
+			],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"auth": {
+				"type": "noauth"
+			},
+			"time": 1520303123450,
+			"name": "/service no email",
+			"description": "",
+			"collectionId": "8c5c2c37-5664-f22e-8739-15151139663e",
+			"responses": [],
+			"preRequestScript": null,
+			"tests": "pm.test(\"401 Unauthorized\", function () {\n    pm.expect(pm.response.text()).to.include(\"Unauthorized\");\n    pm.response.to.have.status(401);\n});",
+			"currentHelper": null,
+			"helperAttributes": null
+		},
+		{
+			"id": "d0ea3d26-e289-db0d-8f7d-c466ad4b750e",
+			"headers": "email: john.doe@gmail.com\napi-key: IjE1MjAzMDI5MDQ0NCI.HvBGNQOZQ30rKG3Pcoya8iv0aVY\n",
+			"headerData": [
+				{
+					"key": "email",
+					"value": "john.doe@gmail.com",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "api-key",
+					"value": "IjE1MjAzMDI5MDQ0NCI.HvBGNQOZQ30rKG3Pcoya8iv0aVY",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{url}}/service?callType=hearing_transcript_by_SCOOBY_DOO",
+			"queryParams": [
+				{
+					"key": "callType",
+					"value": "hearing_transcript_by_SCOOBY_DOO",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7371d2cb-03a4-4dfd-8f25-d0e3d3a44934",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Error 400 not valid call type\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"callType\");",
+							"    pm.response.to.have.status(400);",
+							"});"
+						]
+					}
+				}
+			],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"auth": {
+				"type": "noauth"
+			},
+			"time": 1520303125416,
+			"name": "/service john doe wrong callType",
+			"description": "",
+			"collectionId": "8c5c2c37-5664-f22e-8739-15151139663e",
+			"responses": [],
+			"preRequestScript": null,
+			"tests": "pm.test(\"Error 400 not valid call type\", function () {\n    pm.expect(pm.response.text()).to.include(\"callType\");\n    pm.response.to.have.status(400);\n});",
+			"currentHelper": null,
+			"helperAttributes": null
+		},
+		{
+			"id": "e9b1a741-e61e-9c69-2828-4fea9d686292",
+			"headers": "email: john.doe@gmail.com\napi-key: IjE1MjAzMDI5MDQ0NCI.HvBGNQOZQ30rKG3Pcoya8iv0aVY\n",
+			"headerData": [
+				{
+					"key": "email",
+					"value": "john.doe@gmail.com",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "api-key",
+					"value": "IjE1MjAzMDI5MDQ0NCI.HvBGNQOZQ30rKG3Pcoya8iv0aVY",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{url}}/service?callType=hearing_transcript_by_id&shid=15",
+			"queryParams": [
+				{
+					"key": "callType",
+					"value": "hearing_transcript_by_id",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "shid",
+					"value": "15",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "53ca9297-10b8-4883-9cc6-324b716e5cdc",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Error 400 incorrect param\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"require params\");",
+							"    pm.response.to.have.status(400);",
+							"});"
+						]
+					}
+				}
+			],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"auth": {
+				"type": "noauth"
+			},
+			"time": 1520303128505,
+			"name": "/service john doe right callType wrong param",
+			"description": "",
+			"collectionId": "8c5c2c37-5664-f22e-8739-15151139663e",
+			"responses": [],
+			"preRequestScript": null,
+			"tests": "pm.test(\"Error 400 incorrect param\", function () {\n    pm.expect(pm.response.text()).to.include(\"require params\");\n    pm.response.to.have.status(400);\n});",
+			"currentHelper": null,
+			"helperAttributes": null
+		},
+		{
+			"id": "f2faed26-f441-b33a-2a96-49699ccb3b60",
+			"headers": "email: john.doe@gmail.com\napi-key: IjE1MTY2NjQ5NDQ1NSI.J2wZVISwvg8xekOsw66zBf8g56M\n",
+			"headerData": [
+				{
+					"key": "email",
+					"value": "john.doe@gmail.com",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "api-key",
+					"value": "IjE1MTY2NjQ5NDQ1NSI.J2wZVISwvg8xekOsw66zBf8g56M",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{url}}/service",
+			"queryParams": [],
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "049901b7-86a1-4010-9ee5-de5119d0334d",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Error 400 no params\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"No parameters\");",
+							"    pm.response.to.have.status(400);",
+							"});"
+						]
+					}
+				}
+			],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"auth": {
+				"type": "noauth"
+			},
+			"time": 1520303124433,
+			"name": "/service john doe no params",
+			"description": "",
+			"collectionId": "8c5c2c37-5664-f22e-8739-15151139663e",
+			"responses": [],
+			"preRequestScript": null,
+			"tests": "pm.test(\"Error 400 no params\", function () {\n    pm.expect(pm.response.text()).to.include(\"No parameters\");\n    pm.response.to.have.status(400);\n});",
+			"currentHelper": null,
+			"helperAttributes": null
+		},
+		{
+			"id": "f5b335e3-77df-339e-27e2-06f4b51f344b",
+			"headers": "",
+			"headerData": [],
+			"url": "{{url}}/service",
+			"queryParams": [],
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "827352e9-8164-4fcb-a946-e7bfd9caaefc",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"401 Unauthorized\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Unauthorized\");",
+							"    pm.response.to.have.status(401);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"auth": {
+				"type": "noauth"
+			},
+			"time": 1519852225189,
+			"name": "/service no email or api key",
+			"description": "",
+			"collectionId": "8c5c2c37-5664-f22e-8739-15151139663e",
+			"responses": [],
+			"preRequestScript": null,
+			"tests": "pm.test(\"401 Unauthorized\", function () {\n    pm.expect(pm.response.text()).to.include(\"Unauthorized\");\n    pm.response.to.have.status(401);\n});\n",
+			"currentHelper": null,
+			"helperAttributes": null
+		}
+	]
+}
