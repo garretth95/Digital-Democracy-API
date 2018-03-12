@@ -50,7 +50,7 @@ Now the app should run remotely from the server and can be accessed
 from [api.digitaldemocracy.org](http://api.digitaldemocracy.org/)
 
 
-###Python Config
+### Python Config
 
 This project is using **Python3** so we use `pip3` for installing. 
 
