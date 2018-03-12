@@ -46,11 +46,12 @@ To run the remotely server live at [api.digitaldemocracy.org](http://api.digital
 	sudo python3 manage.py runserver 0.0.0.0:80
 	```
 
-now the app should run remotely from the server and can be accessed
+Now the app should run remotely from the server and can be accessed
 from [api.digitaldemocracy.org](http://api.digitaldemocracy.org/)
 
 
 ###Python Config
+
 This project is using **Python3** so we use `pip3` for installing. 
 
 If you need to install mysql locally make sure to down these one has to work
