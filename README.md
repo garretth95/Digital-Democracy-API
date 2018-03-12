@@ -36,7 +36,7 @@ Now you can run from your local IDE
 To run the remotely server live at [api.digitaldemocracy.org](http://api.digitaldemocracy.org/) on the **Amazon EC2 instance** follow these instructions
 
 
-1. In the `settings.py` file, change where the database is located. The `host` field should be `127.0.1`. The db is on the same instances so we enter `localhost` for the `HOST` location. The `settings.py` file **databases** field should look like below
+1. In the `settings.py` file, change where the database is located. The `host` field should be `127.0.0.1`. The db is on the same instances so we enter `localhost` for the `HOST` location. The `settings.py` file **databases** field should look like below
 
 	![Database remote config in settings_py](Database remot config in settings_py.png)
 	
