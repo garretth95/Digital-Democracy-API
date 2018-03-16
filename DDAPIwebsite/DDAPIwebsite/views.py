@@ -86,19 +86,19 @@ def no_access(request):
 # Throttling and Metering check help function
 def meter_throttle_check(user):
 
-    if user.day_request_count >= user.user_group.metering_rate:
-        return False
-
-    if user.minute_request_count >= user.user_group.throttling_rate:
-        return False
-
-    if user.latest_request is None:  # new user
-        User.objects.filter(pk=user.id).update(latest_request=timezone.now())
-
-    elif (timezone.now() - user.latest_request).seconds:  # within 1 minute
-        # increment minute request count
-        User.objects.filter(pk=user.id).update(minute_request_count=F('minute_request_count') + 1)
-        return False
+    # if user.day_request_count >= user.user_group.metering_rate:
+    #     return False
+    #
+    # if user.minute_request_count >= user.user_group.throttling_rate:
+    #     return False
+    #
+    # if user.latest_request is None:  # new user
+    #     User.objects.filter(pk=user.id).update(latest_request=timezone.now())
+    #
+    # elif (timezone.now() - user.latest_request).seconds:  # within 1 minute
+    #     # increment minute request count
+    #     User.objects.filter(pk=user.id).update(minute_request_count=F('minute_request_count') + 1)
+    #     return False
 
     # increment day request count
     User.objects.filter(pk=user.id).update(day_request_count=F('day_request_count') + 1)
