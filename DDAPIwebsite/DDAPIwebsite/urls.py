@@ -11,5 +11,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^no_access/', views.no_access, name='no_access'),
     url(r'^service', views.service, name='service'),
-
+    url(r'^documentation', views.documentation, name='documentation'),
 ]

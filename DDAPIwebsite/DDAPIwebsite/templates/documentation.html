@@ -1,0 +1,120 @@
+<!doctype html>
+
+{% load static %}
+
+<html lang="en" dir="ltr">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>DDAPI Documentation</title>
+		<link rel="stylesheet" href="{% static '/DDAPIwebsite/css/app.css' %}">
+		<link rel="shortcut icon" href="{% static 'DDAPIwebsite/images/favicon.ico' %}" />
+		<style>
+		ul {
+		    list-style-type: none;
+		    margin: 0;
+		    padding: 0;
+		    overflow: hidden;
+		    border: 1px solid #e7e7e7;
+		    background-color: #f3f3f3;
+		}
+
+		li {
+		    float: left;
+		}
+
+		li a {
+		    display: block;
+		    color: #666;
+		    text-align: center;
+		    padding: 14px 16px;
+		    text-decoration: none;
+		}
+
+		li a:hover:not(.active) {
+		    background-color: #ddd;
+		}
+
+		li a.active {
+		    color: white;
+		    background-color: #4CAF50;
+		}
+		</style>
+	</head>
+
+
+	<ul>
+		<li><a href="/">Home</a></li>
+		<li><a href="/documentation">Documentation</a></li>
+	</ul>
+
+<h1>DDAPI Documentation</h1>
+<p><strong>URL</strong>: <a href="http://api.digitaldemocracy.org/">api.digitaldemocracy.org</a></p>
+<p>To build a proper request you, the developer, will have to build a header containing your <code>api-key</code> and <code>email</code> which is the email used to request the <strong>API key</strong> from <a href="http://api.digitaldemocracy.org/">api.digitaldemocracy.org</a></p>
+<h2>Available API calls</h2>
+<h3>GET Hearing Transcript by id</h3>
+<hr />
+<p><strong>Description</strong>:    Returns full transcript of a hearing including video timestamps and speaker names</p>
+<p><strong>Endpoint</strong>:   <strong>URL</strong>/service</p>
+<p><strong>Method</strong>: <code>GET</code></p>
+<p><strong>Parameters</strong>:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Required</strong>:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>callType</strong> = hearing_transcript_by_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>hid</strong> = \<Hearing id from Digital Democracy database><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Optional</strong>:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;N/A</p>
+<pre><code>Success Response:
+
+    Code: 200
+    Content/type: Application/json
+
+Error Response:
+
+    Code:       400
+    Reason: Incorrect parameters
+
+    Code:       401
+    Reason: Don’t have permission (api-key / email)
+</code></pre>
+<p>Example Request:  </p>
+<pre><code>URL/service?callType=hearing_transcript_by_id&amp;hid=15
+</code></pre>
+<hr />
+<h3>GET Hearing id</h3>
+<hr />
+<p><strong>Description</strong>:    Returns first hearing ID match for a given committee, state, and date</p>
+<p><strong>Endpoint</strong>:   <strong>URL</strong>/service</p>
+<p><strong>Method</strong>: <code>GET</code></p>
+<p>callType = 
+            <strong>date</strong> = \<date of hearing>
+            <strong>committee</strong> = \<Committee that met during hearing>
+            <strong>state</strong> = \<state where hearing occurred></p>
+<p><strong>Parameters</strong>:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Required</strong>:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>callType</strong> = hearing_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>date</strong> = \<date of hearing><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>committee</strong> = \<Committee that met during hearing><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>state</strong> = \<state where hearing occurred><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Optional</strong>:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;N/A</p>
+<pre><code>Success Response:
+
+    Code: 200
+    Content/type: Application/json
+
+Error Response:
+
+    Code:       401
+    Reason: Incorrect parameters
+
+    Code:       401
+    Reason: Don’t have permission (api-key / email)
+</code></pre>
+<p>Example Request:  </p>
+<pre><code>URL/service?callType=hearing_transcript_by_id&amp;hid=15
+</code></pre>
+<hr />
+
+</html>

@@ -86,25 +86,42 @@ def no_access(request):
 # Throttling and Metering check help function
 def meter_throttle_check(user):
 
-    # if user.day_request_count >= user.user_group.metering_rate:
-    #     return False
-    #
-    # if user.minute_request_count >= user.user_group.throttling_rate:
-    #     return False
-    #
-    # if user.latest_request is None:  # new user
-    #     User.objects.filter(pk=user.id).update(latest_request=timezone.now())
-    #
-    # elif (timezone.now() - user.latest_request).seconds:  # within 1 minute
-    #     # increment minute request count
-    #     User.objects.filter(pk=user.id).update(minute_request_count=F('minute_request_count') + 1)
-    #     return False
+    if user.latest_request is None:  # new user
+        User.objects.filter(pk=user.id).update(latest_request=timezone.now())
 
-    # increment day request count
-    User.objects.filter(pk=user.id).update(day_request_count=F('day_request_count') + 1)
+        # increment day request count
+        User.objects.filter(pk=user.id).update(day_request_count=F('day_request_count') + 1)
 
-    # increment minute request count
-    User.objects.filter(pk=user.id).update(minute_request_count=F('minute_request_count') + 1)
+        # increment minute request count
+        User.objects.filter(pk=user.id).update(minute_request_count=F('minute_request_count') + 1)
+
+    else:  # not new user
+
+        if (timezone.now() - user.latest_request).seconds <= 60:  # within 1 minute
+
+            if user.minute_request_count >= user.user_group.throttling_rate:
+                return False
+
+            # increment minute request count
+            User.objects.filter(pk=user.id).update(minute_request_count=F('minute_request_count') + 1)
+
+        else:   # longer than 1 minute
+            # reset minute request count (throttling)
+            User.objects.filter(pk=user.id).update(minute_request_count=1)
+            User.objects.filter(pk=user.id).update(latest_request=timezone.now())
+
+        if (timezone.now() - user.latest_request).days == 0:  # within 1 day
+
+            if user.day_request_count >= user.user_group.metering_rate:
+                return False
+
+            # increment day request count
+            User.objects.filter(pk=user.id).update(day_request_count=F('day_request_count') + 1)
+
+        else:   # longer than 1 day
+            # reset day request count (metering)
+            User.objects.filter(pk=user.id).update(day_request_count=1)
+            User.objects.filter(pk=user.id).update(latest_request=timezone.now())
 
     return True
 
@@ -163,6 +180,11 @@ def service(request):
                                         int(val)
                                     except ValueError:
                                         type_check = False
+                                if avail_params[param] == 'Date':
+                                    try:
+                                        datetime.datetime.strptime(val, '%Y-%m-%d')
+                                    except ValueError:
+                                        type_check = False
 
                             if type_check is False:
                                 return HttpResponse('Error 400: Parameters are of incorrect type.', status=400)
@@ -198,10 +220,13 @@ def service(request):
                     return HttpResponse('Error 400: No parameters defined', status=400)
 
             else:
-                return HttpResponse('Error 400: Throttling or Metering limit reached', status=400)
+                return HttpResponse('Error 429: Throttling or Metering limit reached', status=429)
 
         else:
             return HttpResponse('Error 401: Unauthorized, require email & API key', status=401)
 
     return HttpResponseNotFound(request)
 
+
+def documentation(request):
+    return render(request, 'documentation.html')
