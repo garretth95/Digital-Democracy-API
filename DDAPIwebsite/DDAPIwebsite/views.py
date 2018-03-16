@@ -4,6 +4,8 @@ import os
 import re
 from _datetime import datetime
 from datetime import timedelta, datetime
+from django.db.models import F
+from django.utils import timezone
 
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
@@ -18,6 +20,7 @@ from .call import parse_api_calls, replace_variables
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 api_file = os.path.join(THIS_FOLDER, 'sampleAPIcalls.txt')
 
+# not currently used
 billTypeDict = ['A', 'AB', 'ABX1', 'ABX2', 'ACA', 'ACR', 'ACRX2', 'AJR', 'B', 'BUD', 'C', 'E', 'HB', 'HCR', 'HJR',
                 'HM', 'HR', 'J', 'K', 'L', 'NON', 'R', 'S', 'SB', 'SBX1', 'SBX2', 'SCA', 'SCAX1', 'SCR', 'SCRX1',
                 'SCRX2', 'SJR', 'SM', 'SPB', 'SR', 'SRX1', 'SRX2']
@@ -69,8 +72,6 @@ def new_user(request):
 
 def check_api_key(email, key):  # checks User DB to see if email exists and key matches email
 
-    # print(email, key)
-
     if User.objects.filter(email=email).exists() and User.objects.get(email=email).key == key:
         return True
     else:
@@ -78,9 +79,34 @@ def check_api_key(email, key):  # checks User DB to see if email exists and key 
 
 
 # Don't really use
-
 def no_access(request):
     return render(request, 'no_access.html')
+
+
+# Throttling and Metering check help function
+def meter_throttle_check(user):
+
+    if user.day_request_count >= user.user_group.metering_rate:
+        return False
+
+    if user.minute_request_count >= user.user_group.throttling_rate:
+        return False
+
+    if user.latest_request is None:  # new user
+        User.objects.filter(pk=user.id).update(latest_request=timezone.now())
+
+    elif (timezone.now() - user.latest_request).seconds:  # within 1 minute
+        # increment minute request count
+        User.objects.filter(pk=user.id).update(minute_request_count=F('minute_request_count') + 1)
+        return False
+
+    # increment day request count
+    User.objects.filter(pk=user.id).update(day_request_count=F('day_request_count') + 1)
+
+    # increment minute request count
+    User.objects.filter(pk=user.id).update(minute_request_count=F('minute_request_count') + 1)
+
+    return True
 
 
 def service(request):
@@ -90,82 +116,89 @@ def service(request):
         if 'HTTP_EMAIL' in request.META and 'HTTP_API_KEY' in request.META \
                 and check_api_key(request.META.get('HTTP_EMAIL'), request.META.get('HTTP_API_KEY')):
 
-            # here is where we would check throttling and metering values
+            # here is where we check throttling and metering values
 
-            param_list = request.GET.dict()
+            if meter_throttle_check(User.objects.get(email=request.META.get('HTTP_EMAIL'))):
 
-            if len(param_list) > 0:
+                param_list = request.GET.dict()
 
-                callType = param_list.pop('callType', '')
+                if len(param_list) > 0:
 
-                if len(callType) == 0:  # no call type parameter
-                    return HttpResponse('Error 400: callType parameter is required to make a request.', status=400)
+                    callType = param_list.pop('callType', '')
 
-                if callType not in api_calls:  # we don't support this call type
-                    return HttpResponse('Error 400: "' + callType + '" is not a valid callType.', status=400)
-                else:
-                    avail_params = api_calls[callType].get('params')  # get the parameters from the callType
-                    avail_param_names = []
-                    param_list_names = []
-                    for param, val in avail_params.items():  # get list of names of parameters according to callType
-                        avail_param_names.append(param)
-                    for param, val in param_list.items():  # get list of names of parameters provided in request
-                        param_list_names.append(param)
+                    if len(callType) == 0:  # no call type parameter
+                        return HttpResponse('Error 400: callType parameter is required to make a request.', status=400)
 
-                    # incorrect amount of parameters or incorrect parameters
-                    if len(avail_param_names) != len(param_list_names) or \
-                            sorted(list(set(avail_param_names) & set(param_list_names))) != sorted(avail_param_names):
+                    if callType not in api_calls:  # we don't support this call type
+                        return HttpResponse('Error 400: "' + callType + '" is not a valid callType.', status=400)
+                    else:
+                        avail_params = api_calls[callType].get('params')  # get the parameters from the callType
+                        avail_param_names = []
+                        param_list_names = []
+                        for param, val in avail_params.items():  # get list of names of parameters according to callType
+                            avail_param_names.append(param)
+                        for param, val in param_list.items():  # get list of names of parameters provided in request
+                            param_list_names.append(param)
 
-                        return HttpResponse('Error 400: ' + callType + ' require params: ' +
-                                            ' '.join(avail_param_names), status=400)
+                        # incorrect amount of parameters or incorrect parameters
+                        if len(avail_param_names) != len(param_list_names) or \
+                                sorted(list(set(avail_param_names) & set(param_list_names))) != sorted(avail_param_names):
 
-                    else:   # PARAMETERS ARE CORRECT!!
+                            return HttpResponse('Error 400: ' + callType + ' require params: ' +
+                                                ' '.join(avail_param_names), status=400)
 
-                        # this is where error checking for types will be
+                        else:   # PARAMETERS ARE CORRECT!!
 
-                        type_check = True
-                        for param, val in param_list.items():
+                            # this is where error checking for types will be
 
-                            if avail_params[param] == 'String' and not isinstance(val, str):  # redundant
-                                type_check = False
-                            if avail_params[param] == 'Integer':
-                                try:
-                                    int(val)
-                                except ValueError:
+                            type_check = True
+                            for param, val in param_list.items():
+
+                                # need to check if datetime type
+
+                                if avail_params[param] == 'String' and not isinstance(val, str):  # redundant
                                     type_check = False
+                                if avail_params[param] == 'Integer':
+                                    try:
+                                        int(val)
+                                    except ValueError:
+                                        type_check = False
 
-                        if type_check is False:
-                            return HttpResponse('Error 400: Parameters are of incorrect type.', status=400)
+                            if type_check is False:
+                                return HttpResponse('Error 400: Parameters are of incorrect type.', status=400)
 
-                        # inputDate = request.GET.get('date', '')
-                        # state = request.GET.get('state', '')
-                        # committee = request.GET.get('committee', '')
-                        # billType = request.GET.get('billType', '')
-                        # billNumber = request.GET.get('billNumber', '')
-                        # date = None
+                            # inputDate = request.GET.get('date', '')
+                            # state = request.GET.get('state', '')
+                            # committee = request.GET.get('committee', '')
+                            # billType = request.GET.get('billType', '')
+                            # billNumber = request.GET.get('billNumber', '')
+                            # date = None
 
-                        # if len(inputDate) > 0:
-                        #     try:
-                        #         date = datetime.strptime(inputDate, '%Y-%m-%d')
-                        #     except ValueError:
-                        #         return HttpResponse("Incorrect data format, should be YYYY-MM-DD", status=400)
-                        #     if date.date() > (datetime.today() - timedelta(1)).date():
-                        #         return HttpResponse("Date must be before today", status=400)
-                        #
-                        # if len(billType) > 0 and billType not in billTypeDict:
-                        #     return HttpResponse("Bill type " + billType + " is not valid", status=400)
-                        #
-                        # if len(billNumber) > 0 and (not re.match("^[A-Za-z0-9_-]*$", billNumber) or billNumber.__len__() > 10):
-                        #     return HttpResponse("Bill number " + billNumber + " is not valid", status=400)
+                            # if len(inputDate) > 0:
+                            #     try:
+                            #         date = datetime.strptime(inputDate, '%Y-%m-%d')
+                            #     except ValueError:
+                            #         return HttpResponse("Incorrect data format, should be YYYY-MM-DD", status=400)
+                            #     if date.date() > (datetime.today() - timedelta(1)).date():
+                            #         return HttpResponse("Date must be before today", status=400)
+                            #
+                            # if len(billType) > 0 and billType not in billTypeDict:
+                            #     return HttpResponse("Bill type " + billType + " is not valid", status=400)
+                            #
+                            # if len(billNumber) > 0 and (not re.match("^[A-Za-z0-9_-]*$", billNumber) or billNumber.__len__() > 10):
+                            #     return HttpResponse("Bill number " + billNumber + " is not valid", status=400)
 
-                        query_string = replace_variables(api_calls[callType].get('query'), param_list, avail_params)
+                            query_string = replace_variables(api_calls[callType].get('query'), param_list, avail_params)
 
-                        json_obj = get_json_from_backend(query_string)
+                            json_obj = get_json_from_backend(query_string)
 
-                        return HttpResponse(json.dumps(json_obj), content_type="application/json")
+                            return HttpResponse(json.dumps(json_obj), content_type="application/json")
+
+                else:
+                    return HttpResponse('Error 400: No parameters defined', status=400)
 
             else:
-                return HttpResponse('Error 400: No parameters defined', status=400)
+                return HttpResponse('Error 400: Throttling or Metering limit reached', status=400)
 
         else:
             return HttpResponse('Error 401: Unauthorized, require email & API key', status=401)
