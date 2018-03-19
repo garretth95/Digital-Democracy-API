@@ -1,9 +1,11 @@
 # text file parser
 # reads in API calls for application
+# created by Garrett Heald
 
 import re
 
 
+# parses text file that contains all API calls to be used by the server
 def parse_api_calls(myfile):
 
     call_dict = {}
@@ -29,6 +31,7 @@ def parse_api_calls(myfile):
     return call_dict
 
 
+# replaces the $$variables$$ with the correct parameter for SQL query
 def replace_variables(query, params, types):
     string_arr = query.split(' ')
 

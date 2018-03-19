@@ -1,3 +1,6 @@
+# Database related functionality
+# created by Garrett Heald
+
 from django.db import connections
 import json
 import datetime

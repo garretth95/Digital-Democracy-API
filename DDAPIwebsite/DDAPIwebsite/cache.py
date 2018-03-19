@@ -1,3 +1,6 @@
+# Caching functionality
+# created by Conor Murphy
+
 from django.core.cache import cache
 
 TIMEOUT = 60 * 60 * 6

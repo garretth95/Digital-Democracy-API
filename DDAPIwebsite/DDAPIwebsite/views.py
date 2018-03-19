@@ -1,3 +1,6 @@
+# core functionality of API
+# created by Garrett Heald
+
 import json
 import time
 import os
@@ -25,6 +28,7 @@ billTypeDict = ['A', 'AB', 'ABX1', 'ABX2', 'ACA', 'ACR', 'ACRX2', 'AJR', 'B', 'B
                 'HM', 'HR', 'J', 'K', 'L', 'NON', 'R', 'S', 'SB', 'SBX1', 'SBX2', 'SCA', 'SCAX1', 'SCR', 'SCRX1',
                 'SCRX2', 'SJR', 'SM', 'SPB', 'SR', 'SRX1', 'SRX2']
 
+# get API calls from text file using call.py
 api_calls = parse_api_calls(api_file)
 
 
@@ -36,6 +40,7 @@ def request_access(request):
     return render(request, "request_access.html")
 
 
+# view for adding new user to user database
 def new_user(request):
     # form submission, if GET then probably a refresh -> will redirect
     if request.method == 'POST':
@@ -70,6 +75,7 @@ def new_user(request):
     return HttpResponseRedirect('/request_access/')
 
 
+# helper function for authenticating user
 def check_api_key(email, key):  # checks User DB to see if email exists and key matches email
 
     if User.objects.filter(email=email).exists() and User.objects.get(email=email).key == key:
@@ -126,6 +132,7 @@ def meter_throttle_check(user):
     return True
 
 
+# main API view logic
 def service(request):
 
     if request.method == 'GET':
@@ -189,27 +196,6 @@ def service(request):
                             if type_check is False:
                                 return HttpResponse('Error 400: Parameters are of incorrect type.', status=400)
 
-                            # inputDate = request.GET.get('date', '')
-                            # state = request.GET.get('state', '')
-                            # committee = request.GET.get('committee', '')
-                            # billType = request.GET.get('billType', '')
-                            # billNumber = request.GET.get('billNumber', '')
-                            # date = None
-
-                            # if len(inputDate) > 0:
-                            #     try:
-                            #         date = datetime.strptime(inputDate, '%Y-%m-%d')
-                            #     except ValueError:
-                            #         return HttpResponse("Incorrect data format, should be YYYY-MM-DD", status=400)
-                            #     if date.date() > (datetime.today() - timedelta(1)).date():
-                            #         return HttpResponse("Date must be before today", status=400)
-                            #
-                            # if len(billType) > 0 and billType not in billTypeDict:
-                            #     return HttpResponse("Bill type " + billType + " is not valid", status=400)
-                            #
-                            # if len(billNumber) > 0 and (not re.match("^[A-Za-z0-9_-]*$", billNumber) or billNumber.__len__() > 10):
-                            #     return HttpResponse("Bill number " + billNumber + " is not valid", status=400)
-
                             query_string = replace_variables(api_calls[callType].get('query'), param_list, avail_params)
 
                             json_obj = get_json_from_backend(query_string)
@@ -228,5 +214,6 @@ def service(request):
     return HttpResponseNotFound(request)
 
 
+# document HTML page
 def documentation(request):
     return render(request, 'documentation.html')
